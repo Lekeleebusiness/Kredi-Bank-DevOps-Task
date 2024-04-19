@@ -39,10 +39,10 @@ jobs:
         push: true
         tags: lekelee/user-microservice:${{ github.run_number }}
 
-    - name: Install Terraform
-      uses: hashicorp/setup-terraform@v3
-      with:
-        terraform_version: 1.5.7
+    # - name: Install Terraform
+    #   uses: hashicorp/setup-terraform@v3
+    #   with:
+    #     terraform_version: 1.5.7
       
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -69,7 +69,7 @@ jobs:
       id: install
       
     - name: Add Helm repository for secrets-store-csi-driver
-      run: helm repo add csi-secrets-store https://raw.githubusercontent.com/kubernetes-sigs/secrets-store-csi-driver/main/charts
+      run: helm repo add secrets-store-csi-driver https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts
 
     - name: Deploy csi secret store using Helm
       run: cd kubernetes && helm upgrade --install csi-secrets-store kubernetes/secrets-store-csi-driver --set syncSecret.enabled=true --namespace kube-system
