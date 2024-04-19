@@ -68,20 +68,20 @@ jobs:
          version: '3.14.3' 
       id: install
       
-    - name: Add Helm repository for secrets-store-csi-driver
-      run: helm repo add secrets-store-csi-driver https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts
+    # - name: Add Helm repository for secrets-store-csi-driver
+    #   run: helm repo add secrets-store-csi-driver https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts
       
     - name: Deploy csi secret store using Helm
-      run: helm install csi-secrets-store secrets-store-csi-driver/secrets-store-csi-driver --set syncSecret.enabled=true --namespace kube-system
+      run: helm upgrade --install  csi-secrets-store kubernetes/secrets-store-csi-driver --set syncSecret.enabled=true --namespace kube-system
 
     - name: Deploy aws-provider-installer using Helm
-      run: cd kubernetes && helm upgrade --install aws-provider-installer kubernetes/aws-provider-installer 
+      run: helm upgrade --install aws-provider-installer kubernetes/aws-provider-installer 
 
     - name: Deploy nginx-ingress-controller using Helm
-      run: cd kubernetes &&  helm upgrade --install nginx-controller kubernetes/nginx-ingress-controller
+      run: helm upgrade --install nginx-controller kubernetes/nginx-ingress-controller
 
     - name: Deploy Kredi application using Helm
-      run: cd kubernetes &&  helm upgrade --install kredi-app kubernetes/kredi-app --set image.name=lekelee/user-microservice --set image.tag=${{ github.run_number }}
+      run: helm upgrade --install kredi-app kubernetes/kredi-app --set image.name=lekelee/user-microservice --set image.tag=${{ github.run_number }}
 
     # - name: Destroy Infrastructure  Using Terraform 
     #   run: cd terraform && terraform destroy -auto-approve
