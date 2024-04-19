@@ -33,3 +33,4 @@ I had to comment out some code on Github action so terraform does not build the 
 
 11 RDS was used for the mysql database and ensured that there was connection and ensured all secerets were stored in secret manager and integrated seceret manager with kubernetes. 
 
+Note: The image only runs on virtual machine that uses ARM64 so in my managed worker node i had to specify via terraform.
