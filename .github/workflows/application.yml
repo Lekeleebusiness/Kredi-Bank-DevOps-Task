@@ -1,6 +1,3 @@
-# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
-
 name: project cicd flow
 
 on:
@@ -39,10 +36,10 @@ jobs:
         push: true
         tags: lekelee/user-microservice:${{ github.run_number }}
 
-    # - name: Install Terraform
-    #   uses: hashicorp/setup-terraform@v3
-    #   with:
-    #     terraform_version: 1.5.7
+    - name: Install Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.5.7
       
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -86,5 +83,6 @@ jobs:
     - name: Upload Helm Charts to S3
       run: |
         aws s3 cp --recursive kubernetes s3://kredi-remote-backend/helm-charts/
+        
     # - name: Destroy Infrastructure  Using Terraform 
     #   run: cd terraform && terraform destroy -auto-approve
