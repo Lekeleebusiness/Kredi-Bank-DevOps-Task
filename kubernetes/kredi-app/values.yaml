@@ -1,0 +1,9 @@
+appname: springboot-app
+
+servicename: springboot-service
+
+namespace: production
+
+image:
+  name: lekelee/user-microservice
+  tag: latest

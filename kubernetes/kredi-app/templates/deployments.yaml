@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.appname }}
+  namespace: {{ .Values.namespace}}
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: {{ .Values.appname }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appname }}
+    spec:
+      serviceAccountName: secret-manager-sa
+      containers:
+      - name: springboot-deployment
+        image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+        ports:
+        - containerPort: 8081
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: HOST_NAME
+          value: kredi-prod-rds-instance.cuwuxqervews.us-east-1.rds.amazonaws.com
+        volumeMounts:
+        - name: secrets-store-inline
+          mountPath: "/mnt/secrets"
+          readOnly: true
+      volumes:
+      - name: secrets-store-inline
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: spring-deployment-spc
