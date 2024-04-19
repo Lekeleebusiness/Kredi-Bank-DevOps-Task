@@ -38,3 +38,28 @@ jobs:
         context: .
         push: true
         tags: lekelee/user-microservice:${{ github.run_number }}
+
+    - name: Install Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.5.7
+
+    # - name: Initialize Terraform workspace
+    #   run: cd terraform && terraform init -reconfigure
+      
+    # - name: Configure AWS Credentials
+    #   uses: aws-actions/configure-aws-credentials@v1
+    #   with:
+    #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #     aws-region: us-east-1
+          
+    # - name: Apply Terraform configuration
+    #   run: cd terraform && terraform plan
+
+    # - name: Apply Terraform configuration
+    #   run: cd terraform && terraform apply -auto-approve
+
+    # - name: Update kube config
+    #   run: aws eks update-kubeconfig --name kredi-cluster --region us-east-1
+    
