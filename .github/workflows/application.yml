@@ -68,6 +68,9 @@ jobs:
          version: '3.14.3' 
       id: install
       
+    - name: Add Helm repository for secrets-store-csi-driver
+      run: helm repo add csi-secrets-store https://raw.githubusercontent.com/kubernetes-sigs/secrets-store-csi-driver/main/charts
+
     - name: Deploy csi secret store using Helm
       run: cd kubernetes && helm upgrade --install csi-secrets-store kubernetes/secrets-store-csi-driver --set syncSecret.enabled=true --namespace kube-system
 
