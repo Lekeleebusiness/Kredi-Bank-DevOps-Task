@@ -57,8 +57,8 @@ jobs:
     - name: Plan Terraform configuration
       run: cd terraform && terraform plan
 
-    # - name: Apply Terraform configuration
-    #   run: cd terraform && terraform apply -auto-approve
+    - name: Apply Terraform configuration
+      run: cd terraform && terraform apply -auto-approve
 
     # - name: Update kube config
     #   run: aws eks update-kubeconfig --name kredi-cluster --region us-east-1
