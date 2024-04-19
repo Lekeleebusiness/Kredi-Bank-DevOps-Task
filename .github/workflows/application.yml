@@ -96,5 +96,5 @@ jobs:
     - name: Deploy Kredi application using Helm
       run: helm uninstall kredi-app 
 
-    # - name: Destroy Infrastructure  Using Terraform 
-    #   run: cd terraform && terraform destroy -auto-approve
+    - name: Destroy Infrastructure  Using Terraform 
+      run: cd terraform && terraform destroy -auto-approve
