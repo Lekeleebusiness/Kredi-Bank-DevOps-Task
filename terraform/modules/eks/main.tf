@@ -93,10 +93,10 @@ resource "aws_eks_node_group" "eks_ng_private" {
   subnet_ids      = [var.private_subnet_1_id, var.private_subnet_2_id]
   version         = var.cluster_version
 
-  ami_type       = "AL2_x86_64"
+  ami_type       = "AL2_ARM_64"
   capacity_type  = "ON_DEMAND"
   disk_size      = 20
-  instance_types = ["t2.micro"]
+  instance_types = ["t4g.large"]
 
   scaling_config {
     desired_size = 2
@@ -135,7 +135,7 @@ resource "aws_iam_openid_connect_provider" "eks" {
 }
 
 #To give application running in the pod access to RDS we use IAM Role for service account
-data "aws_iam_policy_document" "rds" {
+data "aws_iam_policy_document" "rds_secret" {
   statement {
     actions = ["sts:AssumeRoleWithWebIdentity"]
     effect  = "Allow"
@@ -143,7 +143,7 @@ data "aws_iam_policy_document" "rds" {
     condition {
       test     = "StringEquals"
       variable = "${replace(aws_iam_openid_connect_provider.eks.url, "https://", "")}:sub"
-      values   = ["system:serviceaccount:prod:rds-sa"]
+      values   = ["system:serviceaccount:production:secret-manager-sa"]
     }
 
     principals {
@@ -153,14 +153,36 @@ data "aws_iam_policy_document" "rds" {
   }
 }
 
-resource "aws_iam_role" "rds_access_role" {
-  assume_role_policy = data.aws_iam_policy_document.rds.json
-  name               = "kredi-prod--rds-access-role"
+resource "aws_iam_role" "rds_secret_access_role" {
+  assume_role_policy = data.aws_iam_policy_document.rds_secret.json
+  name               = "kredi-prod-rds-secret-role"
 }
 
 resource "aws_iam_role_policy_attachment" "rds_iam_role_policy_attach" {
-  role       = aws_iam_role.rds_access_role.name
+  role       = aws_iam_role.rds_secret_access_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonRDSFullAccess"
+}
+
+# Attach the IAM Policy for accessing Secrets Manager
+resource "aws_iam_policy" "secrets_manager_access_policy" {
+  name        = "SecretsManagerAccessPolicy"
+  description = "IAM policy to allow reading specific secret from Secrets Manager"
+  policy      = jsonencode({
+    Version   = "2012-10-17",
+    Statement = [
+      {
+        Effect   = "Allow",
+        Action   = "secretsmanager:GetSecretValue",
+        Resource = "arn:aws:secretsmanager:us-east-1:886243529181:secret:db_credentials-gBKJcT"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_policy_attachment" "secrets_manager_access_attach" {
+  name       = "kredi-prod-SecretsManagerAccessAttach"
+  policy_arn = aws_iam_policy.secrets_manager_access_policy.arn
+  roles      = [aws_iam_role.rds_secret_access_role.name]
 }
 
 # Resource: IAM Policy for Cluster Autoscaler
@@ -223,4 +245,9 @@ resource "aws_iam_role_policy_attachment" "cluster_autoscaler_iam_role_policy_at
   policy_arn = aws_iam_policy.cluster_autoscaler_iam_policy.arn 
   role       = aws_iam_role.cluster_autoscaler_iam_role.name
 }
+
+
+
+
+
 
