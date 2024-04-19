@@ -54,8 +54,8 @@ jobs:
     - name: Initialize Terraform workspace
       run: cd terraform && terraform init -reconfigure
       
-    # - name: Apply Terraform configuration
-    #   run: cd terraform && terraform plan
+    - name: Apply Terraform configuration
+      run: cd terraform && terraform plan
 
     # - name: Apply Terraform configuration
     #   run: cd terraform && terraform apply -auto-approve
