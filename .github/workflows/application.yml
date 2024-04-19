@@ -80,8 +80,8 @@ jobs:
     - name: Deploy nginx-ingress-controller using Helm
       run: helm upgrade --install nginx-controller kubernetes/nginx-ingress-controller
 
-    # - name: Deploy Kredi application using Helm
-    #   run: helm upgrade --install kredi-app kubernetes/kredi-app --set image.name=lekelee/user-microservice --set image.tag=${{ github.run_number }}
+    - name: Deploy Kredi application using Helm
+      run: helm upgrade --install kredi-app kubernetes/kredi-app --set image.name=lekelee/user-microservice --set image.tag=${{ github.run_number }}
 
     - name: Upload Helm Charts to S3
       run: |
