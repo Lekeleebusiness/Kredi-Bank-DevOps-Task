@@ -80,9 +80,21 @@ jobs:
     - name: Deploy Kredi application using Helm
       run: helm upgrade --install kredi-app kubernetes/kredi-app --set image.name=lekelee/user-microservice --set image.tag=${{ github.run_number }}
 
-    - name: Upload Helm Charts to S3
+    - name: Upload all Helm Charts to S3
       run: |
         aws s3 cp --recursive kubernetes s3://kredi-remote-backend/helm-charts/
-        
+
+    - name: Uninstall csi secret store using Helm
+      run: helm uninstall  csi-secrets-store  --namespace kube-system
+      
+    - name: Uninstall aws-provider-installer using Helm
+      run: helm uninstall aws-provider-installer 
+
+    - name: Uninstall nginx-ingress-controller using Helm
+      run: helm uninstall nginx-controller 
+    
+    - name: Deploy Kredi application using Helm
+      run: helm uninstall kredi-app 
+
     # - name: Destroy Infrastructure  Using Terraform 
     #   run: cd terraform && terraform destroy -auto-approve
