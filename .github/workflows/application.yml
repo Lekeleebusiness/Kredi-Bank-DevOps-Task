@@ -63,5 +63,5 @@ jobs:
     - name: Update kube config
       run: aws eks update-kubeconfig --name kredi-cluster --region us-east-1
       
-    - name: Install Helm
-      run: curl -fsSL -o get-helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3.sh && bash get-helm.sh
+    - name: Destroy Infrastructure  Using Terraform 
+      run: cd terraform && terraform destroy -auto-approve
