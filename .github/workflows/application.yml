@@ -44,8 +44,8 @@ jobs:
       with:
         terraform_version: 1.5.7
 
-    # - name: Initialize Terraform workspace
-    #   run: cd terraform && terraform init -reconfigure
+    - name: Initialize Terraform workspace
+      run: cd terraform && terraform init -reconfigure
       
     # - name: Configure AWS Credentials
     #   uses: aws-actions/configure-aws-credentials@v1
