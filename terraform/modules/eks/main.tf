@@ -93,6 +93,7 @@ resource "aws_eks_node_group" "eks_ng_private" {
   subnet_ids      = [var.private_subnet_1_id, var.private_subnet_2_id]
   version         = var.cluster_version
 
+# Just testing disk
   ami_type       = "AL2_ARM_64"
   capacity_type  = "ON_DEMAND"
   disk_size      = 20
