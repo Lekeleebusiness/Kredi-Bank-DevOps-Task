@@ -24,6 +24,16 @@ spec:
           value: prod
         - name: HOST_NAME
           value: kredi-prod-rds-instance.cuwuxqervews.us-east-1.rds.amazonaws.com
+        - name: DATABASE_USER_NAME
+          valueFrom:
+            secretKeyRef:
+              name: k8s-secret
+              key: DATABASE_USER_NAME
+        - name: DATABASE_USER_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: k8s-secret
+              key: DATABASE_USER_PASSWORD
         volumeMounts:
         - name: secrets-store-inline
           mountPath: "/mnt/secrets"

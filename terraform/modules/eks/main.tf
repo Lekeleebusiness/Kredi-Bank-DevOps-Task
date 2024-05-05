@@ -159,11 +159,6 @@ resource "aws_iam_role" "rds_secret_access_role" {
   name               = "kredi-prod-rds-secret-role"
 }
 
-resource "aws_iam_role_policy_attachment" "rds_iam_role_policy_attach" {
-  role       = aws_iam_role.rds_secret_access_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonRDSFullAccess"
-}
-
 # Attach the IAM Policy for accessing Secrets Manager
 resource "aws_iam_policy" "secrets_manager_access_policy" {
   name        = "SecretsManagerAccessPolicy"
@@ -174,7 +169,7 @@ resource "aws_iam_policy" "secrets_manager_access_policy" {
       {
         Effect   = "Allow",
         Action   = "secretsmanager:GetSecretValue",
-        Resource = "arn:aws:secretsmanager:us-east-1:886243529181:secret:db_credentials-gBKJcT"
+        Resource = "arn:aws:secretsmanager:us-east-1:886243529181:secret:db_credentials_new-LlraX3"
       }
     ]
   })

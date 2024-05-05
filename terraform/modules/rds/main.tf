@@ -40,7 +40,7 @@ resource "aws_db_subnet_group" "database_subnet_group" {
 # create the rds instance
 resource "aws_db_instance" "db_instance" {
   engine                  = "mysql"
-  engine_version          = "8.0.31"
+  engine_version          = "8.0.36"
   multi_az                = false
   identifier              = "kredi-prod-rds-instance"
   username                = local.db_creds.DATABASE_USER_NAME
@@ -54,7 +54,7 @@ resource "aws_db_instance" "db_instance" {
 }
 
 data "aws_secretsmanager_secret_version" "cred" {
-  secret_id = "db_credentials"
+  secret_id = "db_credentials_new"
 }
 
 locals {
