@@ -69,7 +69,7 @@ jobs:
     #   run: helm repo add secrets-store-csi-driver https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts
       
     - name: Deploy csi secret store using Helm
-      run: helm upgrade --install  csi-secrets kubernetes/secrets-store-csi-driver --set syncSecret.enabled=true --namespace kube-system
+      run: helm upgrade --install  secret-store-csi kubernetes/secrets-store-csi-driver --set syncSecret.enabled=true --namespace kube-system
 
     - name: Deploy aws-provider-installer using Helm
       run: helm upgrade --install aws-provider kubernetes/aws-provider-installer 
